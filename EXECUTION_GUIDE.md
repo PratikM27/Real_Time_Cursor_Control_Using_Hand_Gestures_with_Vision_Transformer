@@ -17,7 +17,7 @@
 If you want to skip training and use a pretrained model directly:
 
 ```bash
-https://huggingface.co/pratikm27/gesture-recognition-model/blob/main/best_vit_model.pth
+https://huggingface.co/pratikm27/new_vit_train_model/blob/main/best_vit_model.pth
 ```
 
 📂 Place it here:
