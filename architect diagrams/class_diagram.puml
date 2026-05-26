@@ -1,0 +1,167 @@
+@startuml RealTimeGestureControl_ClassDiagram
+
+!define COMPONENT_COLOR #E1F5FF
+!define MODEL_COLOR #FFF9C4
+!define UTIL_COLOR #F0F4C3
+
+class GestureViT {
+  -model_name: str
+  -vit: nn.Module
+  -num_classes: int
+  --
+  +forward(x): Tensor
+  +freeze_backbone(): void
+  +unfreeze_backbone(): void
+  +get_attention_maps(x): List[Tensor]
+}
+
+class HandDetector {
+  -mp_hands: MediaPipe.Hands
+  -roi_padding: int
+  -WRIST: int
+  -THUMB_TIP: int
+  -INDEX_TIP: int
+  -MIDDLE_TIP: int
+  -RING_TIP: int
+  -PINKY_TIP: int
+  --
+  +detect(frame): Dict | None
+}
+
+class CursorSmoother {
+  -window_size: int
+  -x_history: deque
+  -y_history: deque
+  --
+  +smooth(x, y): (float, float)
+  +reset(): void
+}
+
+class GestureDebouncer {
+  -debounce_frames: int
+  -click_cooldown_ms: int
+  -confidence_threshold: float
+  --
+  +is_gesture_valid(gesture, confidence): bool
+}
+
+class FPSCounter {
+  --
+  +update(): void
+  +get_fps(): float
+}
+
+class CursorController {
+  -screen_w: int
+  -screen_h: int
+  -scroll_amount: int
+  -is_dragging: bool
+  --
+  +move_cursor(norm_x, norm_y): void
+  +left_click(): void
+  +right_click(): void
+  +start_drag(): void
+  +scroll_up(): void
+  +scroll_down(): void
+}
+
+class GestureControlSystem {
+  -device: torch.device
+  -model: GestureViT
+  -hand_detector: HandDetector
+  -cursor_controller: CursorController
+  -cursor_smoother: CursorSmoother
+  -gesture_debouncer: GestureDebouncer
+  -fps_counter: FPSCounter
+  -config: Dict
+  -input_size: int
+  -class_names: List[str]
+  -enable_cursor: bool
+  -show_debug: bool
+  --
+  +_setup_device(): torch.device
+  +_load_model(checkpoint_path): GestureViT
+  +preprocess_roi(roi): Tensor
+  +predict(tensor): (str, float)
+  +draw_debug_ui(frame, gesture, confidence, ...): void
+  +run(): void
+}
+
+class EarlyStopping {
+  -patience: int
+  -min_delta: float
+  -verbose: bool
+  -counter: int
+  -best_loss: float
+  -early_stop: bool
+  --
+  +__call__(val_loss): bool
+}
+
+class AverageMeter {
+  -val: float
+  -avg: float
+  -sum: float
+  -count: int
+  --
+  +update(val, n): void
+  +reset(): void
+}
+
+class DataLoader {
+  -dataset: ImageFolder
+  -batch_size: int
+  --
+  +__iter__(): Iterator
+}
+
+class ImageFolder {
+  -root: str
+  -transform: Compose
+  --
+  +__getitem__(idx): (Tensor, int)
+}
+
+GestureControlSystem o-- GestureViT: uses
+GestureControlSystem o-- HandDetector: uses
+GestureControlSystem o-- CursorController: uses
+GestureControlSystem o-- CursorSmoother: uses
+GestureControlSystem o-- GestureDebouncer: uses
+GestureControlSystem o-- FPSCounter: uses
+
+EarlyStopping --> float: monitors
+AverageMeter --> float: tracks
+
+DataLoader --> ImageFolder: wraps
+ImageFolder --> Tensor: returns
+
+note right of GestureViT
+  Vision Transformer Model
+  (ViT-Tiny patch16-224)
+  ImageNet Pretrained
+end note
+
+note right of GestureControlSystem
+  Main Pipeline Orchestrator
+  Coordinates all components
+  Real-time inference loop
+end note
+
+note right of HandDetector
+  MediaPipe Wrapper
+  Detects hand landmarks
+  Extracts ROI bounding box
+end note
+
+note right of CursorSmoother
+  Reduces jitter
+  5-frame moving average
+end note
+
+note right of GestureDebouncer
+  Prevents false triggers
+  Frame consistency check
+  Click cooldown logic
+end note
+
+@enduml

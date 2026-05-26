@@ -1,0 +1,317 @@
+{
+  "evaluation_type": "real-time_live",
+  "timestamp": "2026-05-25 21:32:58",
+  "config": {
+    "rounds": 3,
+    "hold_seconds": 5,
+    "countdown_seconds": 3
+  },
+  "total_frames": 1693,
+  "accuracy": 81.86650915534554,
+  "precision_macro": 83.32180543816014,
+  "recall_macro": 81.80159996189103,
+  "f1_macro": 81.50874660706484,
+  "avg_confidence": 0.7222529379612443,
+  "min_confidence": 0.2254069298505783,
+  "max_confidence": 0.9641526341438293,
+  "per_class": {
+    "fist": {
+      "precision": 75.96153846153845,
+      "recall": 97.93388429752066,
+      "f1": 85.5595667870036,
+      "support": 242
+    },
+    "index_point": {
+      "precision": 76.44628099173553,
+      "recall": 75.51020408163265,
+      "f1": 75.97535934291582,
+      "support": 245
+    },
+    "open_palm": {
+      "precision": 85.96491228070175,
+      "recall": 82.35294117647058,
+      "f1": 84.12017167381974,
+      "support": 238
+    },
+    "pinch": {
+      "precision": 93.56223175965665,
+      "recall": 87.90322580645162,
+      "f1": 90.64449064449065,
+      "support": 248
+    },
+    "three_fingers_down": {
+      "precision": 70.43189368770764,
+      "recall": 91.77489177489177,
+      "f1": 79.69924812030075,
+      "support": 231
+    },
+    "three_fingers_up": {
+      "precision": 93.7062937062937,
+      "recall": 57.758620689655174,
+      "f1": 71.46666666666667,
+      "support": 232
+    },
+    "two_fingers_up": {
+      "precision": 87.17948717948718,
+      "recall": 79.37743190661479,
+      "f1": 83.09572301425662,
+      "support": 257
+    }
+  },
+  "confusion_matrix": [
+    [
+      237,
+      0,
+      0,
+      5,
+      0,
+      0,
+      0
+    ],
+    [
+      35,
+      185,
+      0,
+      0,
+      24,
+      1,
+      0
+    ],
+    [
+      15,
+      2,
+      196,
+      1,
+      20,
+      0,
+      4
+    ],
+    [
+      24,
+      0,
+      0,
+      218,
+      6,
+      0,
+      0
+    ],
+    [
+      0,
+      2,
+      0,
+      8,
+      212,
+      5,
+      4
+    ],
+    [
+      0,
+      36,
+      0,
+      1,
+      39,
+      134,
+      22
+    ],
+    [
+      1,
+      17,
+      32,
+      0,
+      0,
+      3,
+      204
+    ]
+  ],
+  "per_trial": [
+    {
+      "trial": 1,
+      "gesture": "index_point",
+      "gesture_label": "Index Point",
+      "frames_recorded": 80,
+      "correct_frames": 70,
+      "trial_accuracy": 87.5,
+      "avg_confidence": 0.6969485320150852
+    },
+    {
+      "trial": 2,
+      "gesture": "pinch",
+      "gesture_label": "Pinch",
+      "frames_recorded": 82,
+      "correct_frames": 70,
+      "trial_accuracy": 85.36585365853658,
+      "avg_confidence": 0.715341048996623
+    },
+    {
+      "trial": 3,
+      "gesture": "three_fingers_down",
+      "gesture_label": "Three Fingers Down",
+      "frames_recorded": 80,
+      "correct_frames": 75,
+      "trial_accuracy": 93.75,
+      "avg_confidence": 0.8546639055013656
+    },
+    {
+      "trial": 4,
+      "gesture": "open_palm",
+      "gesture_label": "Open Palm",
+      "frames_recorded": 81,
+      "correct_frames": 81,
+      "trial_accuracy": 100.0,
+      "avg_confidence": 0.8644589314490189
+    },
+    {
+      "trial": 5,
+      "gesture": "two_fingers_up",
+      "gesture_label": "Two Fingers Up",
+      "frames_recorded": 92,
+      "correct_frames": 80,
+      "trial_accuracy": 86.95652173913044,
+      "avg_confidence": 0.7190546516491019
+    },
+    {
+      "trial": 6,
+      "gesture": "fist",
+      "gesture_label": "Fist",
+      "frames_recorded": 73,
+      "correct_frames": 73,
+      "trial_accuracy": 100.0,
+      "avg_confidence": 0.7842308046066597
+    },
+    {
+      "trial": 7,
+      "gesture": "three_fingers_up",
+      "gesture_label": "Three Fingers Up",
+      "frames_recorded": 85,
+      "correct_frames": 39,
+      "trial_accuracy": 45.88235294117647,
+      "avg_confidence": 0.5432121659026427
+    },
+    {
+      "trial": 8,
+      "gesture": "pinch",
+      "gesture_label": "Pinch",
+      "frames_recorded": 79,
+      "correct_frames": 70,
+      "trial_accuracy": 88.60759493670885,
+      "avg_confidence": 0.7287275149852415
+    },
+    {
+      "trial": 9,
+      "gesture": "two_fingers_up",
+      "gesture_label": "Two Fingers Up",
+      "frames_recorded": 83,
+      "correct_frames": 76,
+      "trial_accuracy": 91.56626506024097,
+      "avg_confidence": 0.7791208111378084
+    },
+    {
+      "trial": 10,
+      "gesture": "open_palm",
+      "gesture_label": "Open Palm",
+      "frames_recorded": 81,
+      "correct_frames": 72,
+      "trial_accuracy": 88.88888888888889,
+      "avg_confidence": 0.7431943482822843
+    },
+    {
+      "trial": 11,
+      "gesture": "three_fingers_down",
+      "gesture_label": "Three Fingers Down",
+      "frames_recorded": 64,
+      "correct_frames": 62,
+      "trial_accuracy": 96.875,
+      "avg_confidence": 0.8259495496749878
+    },
+    {
+      "trial": 12,
+      "gesture": "fist",
+      "gesture_label": "Fist",
+      "frames_recorded": 83,
+      "correct_frames": 78,
+      "trial_accuracy": 93.97590361445783,
+      "avg_confidence": 0.7410522713718644
+    },
+    {
+      "trial": 13,
+      "gesture": "three_fingers_up",
+      "gesture_label": "Three Fingers Up",
+      "frames_recorded": 76,
+      "correct_frames": 47,
+      "trial_accuracy": 61.8421052631579,
+      "avg_confidence": 0.5721717025888594
+    },
+    {
+      "trial": 14,
+      "gesture": "index_point",
+      "gesture_label": "Index Point",
+      "frames_recorded": 84,
+      "correct_frames": 65,
+      "trial_accuracy": 77.38095238095238,
+      "avg_confidence": 0.7520112093715441
+    },
+    {
+      "trial": 15,
+      "gesture": "pinch",
+      "gesture_label": "Pinch",
+      "frames_recorded": 87,
+      "correct_frames": 78,
+      "trial_accuracy": 89.65517241379311,
+      "avg_confidence": 0.705716290350618
+    },
+    {
+      "trial": 16,
+      "gesture": "open_palm",
+      "gesture_label": "Open Palm",
+      "frames_recorded": 76,
+      "correct_frames": 43,
+      "trial_accuracy": 56.57894736842105,
+      "avg_confidence": 0.6092433684358471
+    },
+    {
+      "trial": 17,
+      "gesture": "three_fingers_down",
+      "gesture_label": "Three Fingers Down",
+      "frames_recorded": 87,
+      "correct_frames": 75,
+      "trial_accuracy": 86.20689655172413,
+      "avg_confidence": 0.7053068718690981
+    },
+    {
+      "trial": 18,
+      "gesture": "index_point",
+      "gesture_label": "Index Point",
+      "frames_recorded": 81,
+      "correct_frames": 50,
+      "trial_accuracy": 61.72839506172839,
+      "avg_confidence": 0.6871005373972433
+    },
+    {
+      "trial": 19,
+      "gesture": "three_fingers_up",
+      "gesture_label": "Three Fingers Up",
+      "frames_recorded": 71,
+      "correct_frames": 48,
+      "trial_accuracy": 67.6056338028169,
+      "avg_confidence": 0.5262435620099726
+    },
+    {
+      "trial": 20,
+      "gesture": "two_fingers_up",
+      "gesture_label": "Two Fingers Up",
+      "frames_recorded": 82,
+      "correct_frames": 48,
+      "trial_accuracy": 58.536585365853654,
+      "avg_confidence": 0.7163930935103718
+    },
+    {
+      "trial": 21,
+      "gesture": "fist",
+      "gesture_label": "Fist",
+      "frames_recorded": 86,
+      "correct_frames": 86,
+      "trial_accuracy": 100.0,
+      "avg_confidence": 0.8849959720012753
+    }
+  ]
+}

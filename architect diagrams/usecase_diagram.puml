@@ -1,0 +1,167 @@
+@startuml RealTimeGestureControl_UseCaseDiagram
+
+!define ACTOR_COLOR #E3F2FD
+!define SYSTEM_COLOR #F1F8E9
+
+left to right direction
+
+actor User
+actor System
+
+rectangle "Gesture Recognition System" {
+  
+  usecase UC1 as "Collect Training Data"
+  usecase UC2 as "Prepare Dataset"
+  usecase UC3 as "Train ViT Model"
+  usecase UC4 as "Evaluate Model\n(Offline)"
+  usecase UC5 as "Evaluate Model\n(Real-Time)"
+  usecase UC6 as "Control Cursor"
+  usecase UC7 as "Generate Report"
+  usecase UC8 as "Manage Checkpoints"
+  usecase UC9 as "Configure System"
+  
+  usecase UC10 as "Detect Hand Gestures"
+  usecase UC11 as "Preprocess Image"
+  usecase UC12 as "Run ViT Inference"
+  usecase UC13 as "Debounce Gesture"
+  usecase UC14 as "Smooth Cursor Position"
+  usecase UC15 as "Execute Action"
+  usecase UC16 as "Move Cursor"
+  usecase UC17 as "Click (Left/Right)"
+  usecase UC18 as "Drag"
+  usecase UC19 as "Scroll"
+  usecase UC20 as "Visualize Debug Info"
+  
+}
+
+''' User interactions
+User --> UC1: performs
+User --> UC2: performs
+User --> UC3: performs
+User --> UC4: performs
+User --> UC5: performs
+User --> UC6: initiates
+User --> UC7: requests
+User --> UC8: manages
+User --> UC9: configures
+
+''' Data Flow
+UC1 --> UC2: feeds data to
+UC2 --> UC3: provides dataset
+
+''' Training and Evaluation
+UC3 --> UC8: saves checkpoint
+UC4 --> UC8: loads checkpoint
+UC5 --> UC8: loads checkpoint
+UC8 --> UC3: loads pre-trained
+
+''' Reporting
+UC4 --> UC7: provides metrics
+UC5 --> UC7: provides metrics
+UC7 --> UC20: visualizes
+
+''' Real-Time Control Flow
+UC6 --> UC10: requires
+UC10 --> UC11: preprocesses
+UC11 --> UC12: performs
+UC12 --> UC13: validates
+UC13 --> UC14: smooths
+UC14 --> UC15: executes
+
+''' Action Execution
+UC15 --> UC16: move
+UC15 --> UC17: click
+UC15 --> UC18: drag
+UC15 --> UC19: scroll
+
+''' Configuration
+UC9 --> UC3: affects
+UC9 --> UC10: affects
+UC9 --> UC12: affects
+UC9 --> UC14: affects
+
+''' System autonomous loop
+System --> UC10: continuous
+System --> UC12: continuous
+System --> UC15: continuous
+System --> UC20: continuous
+
+''' Include relationships
+UC3 ..|> UC8: <<include>>
+UC4 ..|> UC8: <<include>>
+UC5 ..|> UC8: <<include>>
+
+UC10 ..|> UC11: <<include>>
+UC12 ..|> UC11: <<include>>
+UC13 ..|> UC12: <<include>>
+UC14 ..|> UC13: <<include>>
+UC15 ..|> UC14: <<include>>
+
+''' Extend relationships
+UC6 ..|> UC10: <<extend>>
+UC6 ..|> UC15: <<extend>>
+UC6 ..|> UC20: <<extend>>
+
+note right of UC1
+  Input: Webcam
+  Process: MediaPipe detection
+  Output: Raw gesture images
+end note
+
+note right of UC2
+  Input: Raw images (raw_data/)
+  Process: Stratified split 70/15/15
+  Output: Train/val/test folders
+end note
+
+note right of UC3
+  Input: Dataset + Config
+  Process: 2-phase training
+  - Phase 1: Freeze backbone
+  - Phase 2: Full fine-tuning
+  Output: Model checkpoint
+end note
+
+note right of UC4
+  Input: Test dataset + Model
+  Process: Evaluate metrics
+  Output: Accuracy, F1, confusion matrix
+end note
+
+note right of UC5
+  Input: 7 gestures, Model
+  Process: Live gesture prompting
+  Output: Real-world accuracy metrics
+end note
+
+note right of UC6
+  Input: Webcam stream
+  Process: Detect → Classify → Act
+  Output: Cursor movements/clicks
+end note
+
+note right of UC7
+  Input: Training & eval metrics
+  Process: Generate markdown report
+  Output: research_report.md
+end note
+
+note right of UC10
+  Input: Webcam frame
+  Process: MediaPipe hand detection
+  Output: Hand landmarks & ROI
+end note
+
+note right of UC12
+  Input: Preprocessed tensor
+  Process: ViT forward pass
+  Output: Gesture class + confidence
+end note
+
+note right of UC15
+  Input: Gesture type + position
+  Process: Map to OS action
+  Output: Cursor/keyboard command
+end note
+
+@enduml

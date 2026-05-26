@@ -1,0 +1,95 @@
+# ========================
+# Python
+# ========================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+*.manifest
+*.spec
+pip-log.txt
+pip-delete-this-directory.txt
+
+# ========================
+# Virtual Environments
+# ========================
+venv/
+env/
+.env/
+.venv/
+ENV/
+
+# ========================
+# IDE / Editor
+# ========================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# ========================
+# Project-Specific Excludes
+# ========================
+dataset_prepare.txt
+system_analysis.md
+context/
+info/
+
+# ========================
+# OS Generated Files
+# ========================
+.DS_Store
+Thumbs.db
+Desktop.ini
+ehthumbs.db
+
+# ========================
+# Model Checkpoints & Weights
+# ========================
+checkpoints/
+*.pth
+*.pt
+*.onnx
+*.h5
+*.tflite
+*.pkl
+
+# ========================
+# Dataset (raw & processed)
+# ========================
+data/raw_data/
+data/gesture_dataset/
+
+# ========================
+# Experiment Comparison Dirs
+# ========================
+vit_tiny_both_hand_img/
+vit_tiny_patch16_224_compare/
+
+# ========================
+# Jupyter Notebooks
+# ========================
+.ipynb_checkpoints/
+
+# ========================
+# Logs & Misc
+# ========================
+*.log
+*.csv
+*.tsv
+
+# ========================
+# Distribution / Packaging
+# ========================
+*.whl
+*.tar.gz
+*.zip

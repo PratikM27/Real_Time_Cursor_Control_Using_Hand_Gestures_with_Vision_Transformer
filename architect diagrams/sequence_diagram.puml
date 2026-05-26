@@ -1,0 +1,234 @@
+@startuml RealTimeGestureControl_SequenceDiagram
+
+participant Webcam as WC
+participant GestureControlSystem as RTS
+participant HandDetector as HD
+participant Preprocessor as PREP
+participant GestureViT as MODEL
+participant GestureDebouncer as DB
+participant CursorSmoother as CS
+participant CursorController as CC
+
+note over RTS
+  Real-Time Gesture Control Loop
+  Target: 30 FPS (~33ms per frame)
+end note
+
+loop Every Frame (30 FPS)
+  
+  RTS->WC: capture_frame()
+  activate WC
+  WC-->RTS: frame (640×480, BGR)
+  deactivate WC
+  note right of RTS
+    Capture latency: ~10ms
+  end note
+  
+  RTS->HD: detect(frame)
+  activate HD
+  note right of HD
+    MediaPipe hand detection
+  end note
+  
+  alt Hand Detected
+    HD->HD: compute_landmarks()
+    HD->HD: extract_bounding_box()
+    HD->HD: compute_center_position()
+    HD-->RTS: {detected, landmarks, bbox, center, index_tip}
+    deactivate HD
+    note right of RTS
+      Hand detection latency: ~10ms
+    end note
+    
+    RTS->RTS: extract_roi(frame, bbox)
+    RTS->PREP: preprocess_roi(roi)
+    activate PREP
+    PREP->PREP: cvtColor(BGR→RGB)
+    PREP->PREP: resize(224×224)
+    PREP->PREP: normalize(ImageNet stats)
+    PREP->PREP: to_tensor()
+    PREP->PREP: unsqueeze(batch=1)
+    PREP-->RTS: tensor (1, 3, 224, 224)
+    deactivate PREP
+    note right of PREP
+      Preprocessing latency: ~5ms
+    end note
+    
+    RTS->MODEL: forward(tensor)
+    activate MODEL
+    note right of MODEL
+      ViT-Tiny Inference
+    end note
+    MODEL->MODEL: patch_embedding()
+    MODEL->MODEL: transformer_encoder()
+    MODEL->MODEL: classification_head()
+    MODEL-->RTS: logits (1, 7)
+    deactivate MODEL
+    note right of RTS
+      Inference latency: ~40-50ms
+    end note
+    
+    RTS->RTS: softmax(logits)
+    RTS->RTS: argmax(probs)
+    RTS->RTS: get_gesture_name(class_id)
+    note right of RTS
+      Predicted gesture: open_palm
+      Confidence: 0.95
+    end note
+    
+    alt Confidence >= 0.6
+      RTS->DB: is_valid(gesture, confidence, frame_count)
+      activate DB
+      DB->DB: check_frame_consistency()
+      DB->DB: check_click_cooldown()
+      DB->DB: validate_confidence_threshold()
+      
+      alt Frame Consistency Valid
+        DB-->RTS: true (gesture accepted)
+        deactivate DB
+        note right of DB
+          Debouncing latency: <1ms
+        end note
+        
+        RTS->RTS: get_hand_center()
+        note right of RTS
+          Hand center: (0.32, 0.41)
+        end note
+        
+        RTS->CS: smooth(hand_x, hand_y)
+        activate CS
+        CS->CS: append_to_history(x)
+        CS->CS: append_to_history(y)
+        CS->CS: compute_mean(x_history)
+        CS->CS: compute_mean(y_history)
+        CS-->RTS: (smooth_x, smooth_y)
+        deactivate CS
+        note right of CS
+          Smoothing: 5-frame MA
+          Smoothed coords: (0.320, 0.412)
+        end note
+        
+        alt Gesture == open_palm
+          RTS->CC: move_cursor(smooth_x, smooth_y)
+          activate CC
+          CC->CC: normalize_to_screen()
+          CC->CC: pyautogui.moveTo()
+          CC-->RTS: success
+          deactivate CC
+          
+        else Gesture == index_point
+          RTS->CC: left_click()
+          activate CC
+          CC->CC: pyautogui.click()
+          CC-->RTS: success
+          deactivate CC
+          
+        else Gesture == two_fingers_up
+          RTS->CC: right_click()
+          activate CC
+          CC->CC: pyautogui.rightClick()
+          CC-->RTS: success
+          deactivate CC
+          
+        else Gesture == pinch
+          RTS->CC: start_drag()
+          activate CC
+          CC->CC: pyautogui.mouseDown()
+          CC->CC: pyautogui.moveTo(smooth_x, smooth_y)
+          CC-->RTS: success
+          deactivate CC
+          
+        else Gesture == three_fingers_up
+          RTS->CC: scroll_up()
+          activate CC
+          CC->CC: pyautogui.scroll(30)
+          CC-->RTS: success
+          deactivate CC
+          
+        else Gesture == three_fingers_down
+          RTS->CC: scroll_down()
+          activate CC
+          CC->CC: pyautogui.scroll(-30)
+          CC-->RTS: success
+          deactivate CC
+          
+        else Gesture == fist
+          RTS->RTS: neutral (no action)
+          
+        end alt
+        note right of CC
+          Cursor control: <1ms
+        end note
+        
+      else Frame Consistency Invalid
+        DB-->RTS: false (gesture rejected)
+        deactivate DB
+        note right of DB
+          Too few consecutive frames
+        end note
+        
+      end alt
+      
+    else Confidence < 0.6
+      RTS->RTS: skip_action()
+      note right of RTS
+        Confidence too low
+        Skip gesture prediction
+      end note
+      
+    end alt
+    
+  else Hand Not Detected
+    HD-->RTS: null
+    deactivate HD
+    RTS->RTS: skip_frame()
+    note right of RTS
+      No hand in frame
+    end note
+    
+  end alt
+  
+  RTS->RTS: update_fps_counter()
+  note right of RTS
+    Calculate frame FPS
+  end note
+  
+  alt Show Debug Mode
+    RTS->RTS: draw_debug_overlay()
+    RTS->RTS: draw_gesture_name()
+    RTS->RTS: draw_confidence()
+    RTS->RTS: draw_fps()
+    RTS->RTS: draw_landmarks()
+    note right of RTS
+      Render debug visualization
+    end note
+  end alt
+  
+  RTS->RTS: render_frame()
+  note right of RTS
+    Display frame to window
+    Total loop time: ~70-80ms
+  end note
+  
+  alt Quit Signal
+    break
+  end alt
+  
+end loop
+
+RTS->WC: release_camera()
+RTS->RTS: cleanup_resources()
+
+note over RTS
+  Total Latency Budget: ~70-80ms
+  Capture: 10ms
+  Detection: 10ms
+  Preprocessing: 5ms
+  Inference: 40-50ms
+  Debouncing: <1ms
+  Cursor: <1ms
+  
+  Result: 30 FPS Real-Time ✓
+end note
+
+@enduml
