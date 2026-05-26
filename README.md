@@ -59,7 +59,7 @@ python -c "import mediapipe; print(f'MediaPipe {mediapipe.__version__}')"
 If you want to use a pretrained model instead of training your own:
 
 ```bash
-https://huggingface.co/pratikm27/gesture-recognition-model/blob/main/best_vit_model.pth
+https://huggingface.co/pratikm27/new_vit_train_model/blob/main/best_vit_model.pth
 ```
 
 Place it here:
