@@ -55,9 +55,20 @@ python -c "import mediapipe; print(f'MediaPipe {mediapipe.__version__}')"
 python -c "import pyautogui; print(f'PyAutoGUI {pyautogui.__version__}')"
 ```
 
-### 4. Download Pretrained Model (Optional)
+---
 
-If you want to use a pretrained model instead of training your own, download it from:
+> **📌 Important:** The training dataset (gesture images) is **not included** in this repository — only the source code and a pretrained model are provided. You have two options to get started:
+>
+> | Path | Description | Steps |
+> |------|-------------|-------|
+> | **Path A** — Use Pretrained Model | Download the pretrained model and run the system directly | Install → Download Model → Run |
+> | **Path B** — Train From Scratch | Collect your own gesture data, train a new model, then run | Install → Collect Data → Prepare → Train → Run |
+
+---
+
+## Path A: Use Pretrained Model (Quick Start)
+
+If you want to skip data collection and training, download the pretrained model:
 
 [Download best_vit_model.pth](https://huggingface.co/pratikm27/new_vit_train_model/blob/main/best_vit_model.pth)
 
@@ -69,9 +80,13 @@ Final_Year_Project/
 └── ...
 ```
 
+Then jump directly to **Step 4 (Evaluate)**, **Step 5 (Real-Time Evaluation)**, or **Step 6 (Run Gesture Control)** below.
+
 ---
 
-## Usage Guide
+## Path B: Collect Your Own Data & Train From Scratch
+
+Follow Steps 1–3 below to collect gesture data, prepare the dataset, and train a new model.
 
 ### Step 1: Collect Training Data
 
@@ -109,6 +124,10 @@ python training/train.py --epochs 20 --batch-size 8 --lr 5e-5
 ```
 
 Training curves and best checkpoint are saved automatically.
+
+---
+
+## Common Steps (Both Paths)
 
 ### Step 4: Evaluate Model
 
@@ -162,6 +181,7 @@ python analysis/generate_report.py
 ```
 
 Generates a structured research-paper-style report at `results/research_report.md`.
+
 
 ---
 

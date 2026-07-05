@@ -12,9 +12,22 @@
 
 ---
 
-## Download Pretrained Model (Skip Training)
+## ⚠️ Important Note
 
-If you want to skip training and use a pretrained model directly:
+**The training dataset (gesture images) is not included in this repository.** Only the source code and a pretrained model are provided.
+
+You have **two options** to get started:
+
+| Path | What To Do | Steps to Follow |
+|------|-----------|-----------------|
+| **Path A** — Use Pretrained Model | Download the pretrained model and run directly | Step 1 → Download Model → Skip to Step 5 |
+| **Path B** — Train From Scratch | Collect your own gesture data and train a new model | Step 1 → Step 2 → Step 3 → Step 4 → Step 5 onwards |
+
+---
+
+## Path A: Download Pretrained Model (Skip Data Collection & Training)
+
+If you want to skip data collection and training, download the pretrained model:
 
 [Download best_vit_model.pth](https://huggingface.co/pratikm27/new_vit_train_model/blob/main/best_vit_model.pth)
 
@@ -26,7 +39,12 @@ Final_Year_Project/
 └── ...
 ```
 
-Then jump straight to **Step 4 (Evaluate)** or **Step 5 (Run Real-Time)**.
+After installing dependencies (Step 1), jump straight to **Step 5 (Evaluate)**, **Step 5.5 (Real-Time Evaluation)**, or **Step 6 (Run Real-Time)**.
+
+---
+
+## Path B: Collect Your Own Data & Train (Steps 2–4)
+
 
 ---
 
@@ -185,7 +203,9 @@ python training/train.py --epochs 20 --batch-size 8 --lr 5e-5
 
 ---
 
-## Step 5: Evaluate the ViT Model
+## Common Steps (Both Paths)
+
+
 
 ```bash
 python training/evaluate.py
