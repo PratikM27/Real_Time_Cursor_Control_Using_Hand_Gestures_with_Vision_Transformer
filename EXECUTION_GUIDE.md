@@ -45,6 +45,7 @@ After installing dependencies (Step 1), jump straight to **Step 5 (Evaluate)**, 
 
 ## Path B: Collect Your Own Data & Train (Steps 2–4)
 
+Follow Steps 2–4 below to collect your own gesture images, prepare the dataset, and train a new model from scratch.
 
 ---
 
@@ -205,7 +206,7 @@ python training/train.py --epochs 20 --batch-size 8 --lr 5e-5
 
 ## Common Steps (Both Paths)
 
-
+### Step 5: Evaluate the ViT Model
 
 ```bash
 python training/evaluate.py
