@@ -16,9 +16,7 @@
 
 If you want to skip training and use a pretrained model directly:
 
-```bash
-https://huggingface.co/pratikm27/new_vit_train_model/blob/main/best_vit_model.pth
-```
+[Download best_vit_model.pth](https://huggingface.co/pratikm27/new_vit_train_model/blob/main/best_vit_model.pth)
 
 📂 Place it here:
 ```
@@ -149,7 +147,7 @@ python training/train.py --epochs 30
 
 ### What Happens
 
-- Downloads `vit_base_patch16_224` pretrained on ImageNet (first run only)
+- Downloads `vit_tiny_patch16_224` pretrained on ImageNet (first run only)
 - **Phase 1 (epochs 1–5):** Backbone frozen — only classification head is trained
 - **Phase 2 (epochs 6–30):** Full model fine-tuned with lower learning rate (LR × 0.1)
 - Applies data augmentation (random crop, flip, rotation, color jitter, Gaussian blur)
@@ -333,6 +331,7 @@ python realtime/gesture_control.py --no-cursor   # Debug mode
 
 # Generate Report
 python analysis/generate_report.py
+```
 
 
 ---

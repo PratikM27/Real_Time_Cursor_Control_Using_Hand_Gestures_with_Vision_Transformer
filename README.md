@@ -10,7 +10,7 @@ This project implements a **real-time gesture-controlled cursor system** using w
 
 | Model | Architecture | Input Size | Parameters |
 |-------|-------------|-----------|------------|
-| **ViT** | ViT-Base-Patch16-224 (ImageNet pretrained) | 224×224 | ~86M |
+| **ViT** | ViT-Tiny-Patch16-224 (ImageNet pretrained) | 224×224 | ~5.7M |
 
 ### Gesture Classes (7)
 
@@ -52,19 +52,18 @@ pip install -r requirements.txt
 python -c "import torch; print(f'PyTorch {torch.__version__}, CUDA: {torch.cuda.is_available()}')"
 python -c "import timm; print(f'timm {timm.__version__}')"
 python -c "import mediapipe; print(f'MediaPipe {mediapipe.__version__}')"
+python -c "import pyautogui; print(f'PyAutoGUI {pyautogui.__version__}')"
 ```
 
 ### 4. Download Pretrained Model (Optional)
 
-If you want to use a pretrained model instead of training your own:
+If you want to use a pretrained model instead of training your own, download it from:
 
-```bash
-https://huggingface.co/pratikm27/new_vit_train_model/blob/main/best_vit_model.pth
-```
+[Download best_vit_model.pth](https://huggingface.co/pratikm27/new_vit_train_model/blob/main/best_vit_model.pth)
 
 Place it here:
 ```
-project/
+Final_Year_Project/
 ├── checkpoints/
 │   └── best_vit_model.pth
 └── ...
@@ -104,6 +103,11 @@ Training uses a two-phase strategy:
 - **Phase 1 (epochs 1–5):** Train classification head only (backbone frozen)
 - **Phase 2 (epochs 6–30):** Fine-tune entire model
 
+Optional overrides:
+```bash
+python training/train.py --epochs 20 --batch-size 8 --lr 5e-5
+```
+
 Training curves and best checkpoint are saved automatically.
 
 ### Step 4: Evaluate Model
@@ -114,7 +118,26 @@ python training/evaluate.py
 
 Generates confusion matrix, classification report, and latency benchmarks.
 
-### Step 5: Run Real-Time Gesture Control
+Use a custom checkpoint:
+```bash
+python training/evaluate.py --checkpoint path/to/your_checkpoint.pth
+```
+
+### Step 5: Real-Time Live Accuracy Evaluation
+
+```bash
+python training/realtime_evaluate.py
+```
+
+Tests your model's accuracy **live** — the system prompts you to perform each gesture in front of the webcam and measures how accurately the model predicts in real-time.
+
+Options:
+```bash
+python training/realtime_evaluate.py --rounds 5 --hold 8
+python training/realtime_evaluate.py --checkpoint path/to/model.pth
+```
+
+### Step 6: Run Real-Time Gesture Control
 
 ```bash
 python realtime/gesture_control.py
@@ -125,9 +148,14 @@ Debug mode (no cursor movement, just see predictions):
 python realtime/gesture_control.py --no-cursor
 ```
 
+Silent mode (no visualization window):
+```bash
+python realtime/gesture_control.py --no-debug
+```
+
 Press **Q** to quit the real-time system.
 
-### Step 6: Generate Research Report
+### Step 7: Generate Research Report
 
 ```bash
 python analysis/generate_report.py
@@ -140,29 +168,35 @@ Generates a structured research-paper-style report at `results/research_report.m
 ## Project Structure
 
 ```
-├── config.py                  # Central configuration
-├── requirements.txt           # Dependencies
-├── README.md                  # This file
-├── EXECUTION_GUIDE.md         # Detailed step-by-step guide
+├── config.py                    # Central configuration
+├── requirements.txt             # Dependencies
+├── README.md                    # This file
+├── EXECUTION_GUIDE.md           # Detailed step-by-step guide
 ├── data/
-│   ├── collect_data.py        # Webcam data collection
-│   ├── prepare_dataset.py     # Train/val/test split
-│   └── gesture_dataset/       # Generated dataset
+│   ├── collect_data.py          # Webcam data collection
+│   ├── prepare_dataset.py       # Train/val/test split
+│   ├── raw_data/                # Raw collected images
+│   └── gesture_dataset/         # Generated dataset (train/val/test)
 ├── models/
-│   └── vit_model.py           # Vision Transformer architecture
+│   ├── __init__.py
+│   └── vit_model.py             # Vision Transformer architecture
 ├── training/
-│   ├── train.py               # Training script
-│   ├── evaluate.py            # Evaluation & metrics
-│   └── utils.py               # Helpers
+│   ├── __init__.py
+│   ├── train.py                 # Training script
+│   ├── evaluate.py              # Evaluation & metrics
+│   ├── realtime_evaluate.py     # Live real-time accuracy evaluation
+│   └── utils.py                 # Helpers
 ├── realtime/
-│   ├── gesture_control.py     # Main real-time loop
-│   ├── hand_detector.py       # MediaPipe wrapper
-│   ├── cursor_controller.py   # PyAutoGUI wrapper
-│   └── gesture_smoother.py    # Smoothing & debounce
+│   ├── __init__.py
+│   ├── gesture_control.py       # Main real-time loop
+│   ├── hand_detector.py         # MediaPipe wrapper
+│   ├── cursor_controller.py     # PyAutoGUI wrapper
+│   └── gesture_smoother.py      # Smoothing & debounce
 ├── analysis/
-│   └── generate_report.py     # Report generation
-├── checkpoints/               # Saved model weights
-└── results/                   # Output plots & metrics
+│   ├── __init__.py
+│   └── generate_report.py       # Report generation
+├── checkpoints/                 # Saved model weights
+└── results/                     # Output plots & metrics
 ```
 
 ---
@@ -175,7 +209,8 @@ Generates a structured research-paper-style report at `results/research_report.m
 | Hand Detection | MediaPipe |
 | Video Capture | OpenCV |
 | Cursor Control | PyAutoGUI |
-| Data Science | NumPy, Matplotlib, scikit-learn |
+| Data Science | NumPy, Matplotlib, seaborn, scikit-learn, pandas |
+| Utilities | tqdm, Pillow, ONNX, ONNX Runtime |
 
 ---
 
